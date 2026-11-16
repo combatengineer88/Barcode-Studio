@@ -17,6 +17,7 @@ ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 UninstallDisplayIcon={app}\BarcodeStudio.exe
 WizardStyle=modern
+SetupIconFile=..\assets\barcode-icon.ico
 PrivilegesRequired=lowest
 [Files]
 Source: "..\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
