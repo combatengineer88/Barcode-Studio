@@ -26,11 +26,17 @@ public sealed class MainForm : Form {
     StartPosition = FormStartPosition.CenterScreen; Font = new Font("Segoe UI", 10);
     BackColor = Color.FromArgb(243,246,250);
     var title = new Label { Text = "BARCODE STUDIO  |  QR + 1D", Dock = DockStyle.Top, Height = 70, BackColor = Color.FromArgb(25,46,77), ForeColor = Color.White, Font = new Font("Segoe UI", 19, FontStyle.Bold), TextAlign = ContentAlignment.MiddleLeft, Padding = new Padding(22,0,0,0) };
-    Controls.Add(title);
+    // Reserve a dedicated header row so the banner never overlaps the editor.
+    var shell = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 2, Margin = Padding.Empty, Padding = Padding.Empty };
+    shell.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+    shell.RowStyles.Add(new RowStyle(SizeType.Absolute, 70));
+    shell.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+    Controls.Add(shell);
+    shell.Controls.Add(title, 0, 0);
     var layout = new TableLayoutPanel { Dock = DockStyle.Fill, RowCount = 4, ColumnCount = 1, Padding = new Padding(20) };
     layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 170)); layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 50));
     layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); layout.RowStyles.Add(new RowStyle(SizeType.Absolute, 65));
-    Controls.Add(layout); layout.BringToFront(); title.BringToFront();
+    shell.Controls.Add(layout, 0, 1);
     var form = new FlowLayoutPanel { Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false, AutoScroll = true };
     var row = new FlowLayoutPanel { Width = 860, Height = 65, WrapContents = false };
     format.Items.AddRange(types.Select(t => (object)t.Name).ToArray()); format.SelectedIndex = 0;
