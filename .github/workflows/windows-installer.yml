@@ -14,6 +14,10 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '10.0.x'
+      - name: Prepare application icon
+        shell: pwsh
+        run: |
+          [IO.File]::WriteAllBytes("assets/barcode-icon.ico", [Convert]::FromBase64String((Get-Content "assets/barcode-icon.ico.base64" -Raw).Trim()))
       - name: Publish self-contained Windows app (multi-file for faster startup)
         shell: pwsh
         run: |
