@@ -54,7 +54,7 @@ public sealed class MainForm : Form {
       else if (control is CheckBox c) c.CheckedChanged += (_,_) => Queue();
     }
     format.SelectedIndexChanged += (_,_) => { level.Enabled = format.SelectedIndex == 0; readable.Enabled = format.SelectedIndex != 0; };
-    readable.Enabled = false; Generate();
+    readable.Enabled = false; Program.Log("MainForm constructor finished. Initial generation deferred.");
   }
   static Control Field(string caption, Control field, int width) {
     var panel = new Panel { Width = width, Height = field is TextBox ? 105 : 60 };
@@ -65,9 +65,22 @@ public sealed class MainForm : Form {
     var b = new Button { Text = name, Width = 118, Height = 40, Margin = new Padding(0,0,10,0), BackColor = Color.FromArgb(34,83,149), ForeColor = Color.White, FlatStyle = FlatStyle.Flat };
     b.FlatAppearance.BorderSize = 0; b.Click += handler; return b;
   }
+  protected override void OnShown(EventArgs e) {
+    base.OnShown(e);
+    Program.Log("MainForm OnShown fired.");
+    WindowState = FormWindowState.Normal;
+    ShowInTaskbar = true;
+    Activate();
+    BeginInvoke(new Action(() => {
+      Program.Log("Deferred initial barcode generation started.");
+      Generate();
+      Program.Log("Deferred initial barcode generation finished.");
+    }));
+  }
   void Queue() { timer.Stop(); timer.Start(); }
   void Generate() {
     try {
+      Program.Log("Generate entered.");
       string content = value.Text.Trim();
       if (content.Length == 0) throw new ArgumentException("Enter a barcode value.");
       var kind = types[format.SelectedIndex].Kind;
@@ -91,8 +104,8 @@ public sealed class MainForm : Form {
         }
         bmp.Dispose(); bmp = labeled;
       }
-      var old = image; image = bmp; preview.Image = bmp; old?.Dispose(); status.Text = "Ready";
-    } catch(Exception ex) { preview.Image=null; image?.Dispose(); image=null; status.Text=ex.Message; }
+      var old = image; image = bmp; preview.Image = bmp; old?.Dispose(); status.Text = "Ready"; Program.Log("Generate completed.");
+    } catch(Exception ex) { preview.Image=null; image?.Dispose(); image=null; status.Text=ex.Message; Program.Log("Generate error: " + ex); }
   }
   void Save(object? s,EventArgs e) {
     if(image==null) return;
