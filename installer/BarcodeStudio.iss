@@ -1,13 +1,13 @@
 #define MyAppName "Barcode Studio"
 #ifndef MyAppVersion
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.1.0"
 #endif
 [Setup]
 AppId={{9E65CFD9-5E58-4A8D-8B72-5CE3E7E0B640}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 AppPublisher=Barcode Studio
-DefaultDirName={autopf}\Barcode Studio
+DefaultDirName={localappdata}\Programs\Barcode Studio
 DefaultGroupName=Barcode Studio
 OutputDir=..\installer-output
 OutputBaseFilename=BarcodeStudio-Setup-{#MyAppVersion}-win-x64
@@ -19,7 +19,7 @@ UninstallDisplayIcon={app}\BarcodeStudio.exe
 WizardStyle=modern
 PrivilegesRequired=lowest
 [Files]
-Source: "..\publish\BarcodeStudio.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 [Icons]
 Name: "{group}\Barcode Studio"; Filename: "{app}\BarcodeStudio.exe"
 Name: "{autodesktop}\Barcode Studio"; Filename: "{app}\BarcodeStudio.exe"; Tasks: desktopicon
